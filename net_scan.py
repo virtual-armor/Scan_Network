@@ -2,14 +2,14 @@
 
 import scapy.all as sc
 import subprocess as sp
-import optparse as op
+import argparse as ap
 import re
 
 #get ip address and host range
 def get_ip():
-	parser = op.OptionParser()
-	parser.add_option("-p", "--ip_address", dest="ip_address", help="Enter the full IP address range (including CIDR range). E.g. 170.2.44.0/24")
-	(options, values) = parser.parse_args()
+	parser = ap.ArgumentParser()
+	parser.add_argument("-p", "--ip_address", dest="ip_address", help="Enter the full IP address range (including CIDR range). E.g. 170.2.44.0/24")
+	(options) = parser.parse_args()
 	if not options.ip_address:
 		parser.error("[-] An IP address range was not specified")
 	else:
@@ -60,4 +60,7 @@ def print_connected_devices(devices):
 ip_result = get_ip()
 result = scan(ip_result.ip_address)
 #result = scan("172.16.251.0/24")
-print_connected_devices(result)
+if result:
+	print_connected_devices(result)
+else:
+	print("[-] No results. Did you enter the correct IP range format? -->> e.g. 192.22.33.1/24")
